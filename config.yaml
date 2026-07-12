@@ -15,7 +15,7 @@ douyin:
 
 llm:
   # DeepSeek API Key（从 https://platform.deepseek.com/api_keys 获取）
-  api_key: "YOUR_DEEPSEEK_API_KEY_HERE"
+  api_key: "sk-580eb8fa187d4d7eae532b40a7cacd83"
   # 模型选择（deepseek-chat 性价比最高，deepseek-reasoner 推理更强）
   model: "deepseek-chat"
   # API 地址（一般不需改）
@@ -28,8 +28,8 @@ smtp:
   host: "smtpdm.aliyun.com"
   port: 465
   use_ssl: true
-  username: "YOUR_SMTP_USERNAME"
-  password: "YOUR_SMTP_PASSWORD"
+  username: "moxingxiansheng@autonotify.xyz"
+  password: "MOxing1234"
   from_name: "模型先生视频提醒"
 
 # 收件人列表文件路径（相对于本配置文件）
