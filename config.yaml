@@ -1,0 +1,36 @@
+# ==========================================
+# 抖音博主"模型先生"视频监控与股票推荐配置
+# ==========================================
+
+douyin:
+  # 目标博主抖音号（直接通过 https://www.douyin.com/user/{douyin_id} 访问）
+  douyin_id: "moxingxiansheng"
+  # 浏览器模式：true=无头模式(后台运行), false=显示浏览器窗口(调试用)
+  headless: true
+  # 浏览器等待超时 (毫秒)
+  timeout: 30000
+  # 语音转文字：false=仅提取字幕，true=无字幕时自动用 whisper 转文字
+  # 需要: pip install openai-whisper + 安装 ffmpeg
+  enable_whisper: false
+
+llm:
+  # Anthropic Claude API Key
+  api_key: "YOUR_ANTHROPIC_API_KEY_HERE"
+  # 模型选择（推荐 claude-sonnet-5，性价比高）
+  model: "claude-sonnet-20250601"
+  # API 地址（可改为代理地址）
+  base_url: "https://api.anthropic.com"
+  # 最大输出 token
+  max_tokens: 2048
+
+smtp:
+  # 阿里云邮件推送 SMTP 配置
+  host: "smtpdm.aliyun.com"
+  port: 465
+  use_ssl: true
+  username: "YOUR_SMTP_USERNAME"
+  password: "YOUR_SMTP_PASSWORD"
+  from_name: "模型先生视频提醒"
+
+# 收件人列表文件路径（相对于本配置文件）
+email_list_file: "emails.csv"

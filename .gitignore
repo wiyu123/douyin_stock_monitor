@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.db
+
+# IDE
+.vscode/
+.idea/
+
+# 配置（含敏感信息）
+# config.yaml 不要提交到版本控制
+
+# 运行产物
+videos.db
+videos.db-wal
+videos.db-shm
+
+# Playwright
+playwright-report/
