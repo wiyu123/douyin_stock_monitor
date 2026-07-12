@@ -1,6 +1,6 @@
 """
 大语言模型视频概括模块
-使用 Claude API 概括抖音视频内容，识别板块和个股。
+使用 DeepSeek API（OpenAI 兼容格式）概括抖音视频内容，识别板块和个股。
 """
 
 import json
@@ -8,7 +8,7 @@ import logging
 import re
 from typing import Optional
 
-from anthropic import Anthropic
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
@@ -48,19 +48,19 @@ SYSTEM_PROMPT = """你是一位专业的中国股市分析师。用户会提供�
 
 
 class LLMSummarizer:
-    """视频内容 LLM 概括器"""
+    """视频内容 LLM 概括器（DeepSeek API）"""
 
     def __init__(
         self,
         api_key: str,
-        model: str = "claude-sonnet-20250601",
-        base_url: str = "https://api.anthropic.com",
+        model: str = "deepseek-chat",
+        base_url: str = "https://api.deepseek.com",
         max_tokens: int = 2048,
     ):
         self.api_key = api_key
         self.model = model
         self.max_tokens = max_tokens
-        self._client = Anthropic(
+        self._client = OpenAI(
             api_key=api_key,
             base_url=base_url,
         )
@@ -94,21 +94,21 @@ class LLMSummarizer:
 
         user_content = "\n".join(parts)
 
-        logger.info(f"正在调用 Claude API (model={self.model})...")
+        logger.info(f"正在调用 DeepSeek API (model={self.model})...")
 
         try:
-            response = self._client.messages.create(
+            response = self._client.chat.completions.create(
                 model=self.model,
                 max_tokens=self.max_tokens,
-                system=SYSTEM_PROMPT,
+                temperature=0.3,
                 messages=[
-                    {"role": "user", "content": user_content}
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_content},
                 ],
-                temperature=0.3,  # 低温度，保证一致性
             )
 
-            raw_text = response.content[0].text if response.content else ""
-            logger.info(f"Claude 返回 {len(raw_text)} 字符")
+            raw_text = response.choices[0].message.content if response.choices else ""
+            logger.info(f"DeepSeek 返回 {len(raw_text)} 字符")
 
             # 解析 JSON
             parsed = self._parse_json(raw_text)
@@ -116,7 +116,7 @@ class LLMSummarizer:
             return parsed
 
         except Exception as e:
-            logger.error(f"Claude API 调用失败: {e}", exc_info=True)
+            logger.error(f"DeepSeek API 调用失败: {e}", exc_info=True)
             return {
                 "summary": f"（API 调用失败: {e}）",
                 "sectors": [],
@@ -126,7 +126,7 @@ class LLMSummarizer:
 
     @staticmethod
     def _parse_json(text: str) -> dict:
-        """从 Claude 返回文本中提取 JSON"""
+        """从 LLM 返回文本中提取 JSON"""
         # 尝试直接解析
         try:
             return json.loads(text)
@@ -152,7 +152,7 @@ class LLMSummarizer:
                 pass
 
         # 解析失败，返回原始文本作为 summary
-        logger.warning("无法解析 Claude 返回的 JSON，将原始文本作为 summary")
+        logger.warning("无法解析 LLM 返回的 JSON，将原始文本作为 summary")
         return {
             "summary": text[:500],
             "sectors": [],
@@ -167,11 +167,10 @@ def _test():
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     )
 
-    # 注意：需要设置真实的 API Key
     import os
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    api_key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not api_key:
-        print("请设置 ANTHROPIC_API_KEY 环境变量后运行测试")
+        print("请设置 DEEPSEEK_API_KEY 环境变量后运行测试")
         return
 
     summarizer = LLMSummarizer(api_key=api_key)

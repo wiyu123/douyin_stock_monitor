@@ -14,12 +14,12 @@ douyin:
   enable_whisper: false
 
 llm:
-  # Anthropic Claude API Key
-  api_key: "YOUR_ANTHROPIC_API_KEY_HERE"
-  # 模型选择（推荐 claude-sonnet-5，性价比高）
-  model: "claude-sonnet-20250601"
-  # API 地址（可改为代理地址）
-  base_url: "https://api.anthropic.com"
+  # DeepSeek API Key（从 https://platform.deepseek.com/api_keys 获取）
+  api_key: "YOUR_DEEPSEEK_API_KEY_HERE"
+  # 模型选择（deepseek-chat 性价比最高，deepseek-reasoner 推理更强）
+  model: "deepseek-chat"
+  # API 地址（一般不需改）
+  base_url: "https://api.deepseek.com"
   # 最大输出 token
   max_tokens: 2048
 

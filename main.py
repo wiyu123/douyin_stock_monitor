@@ -51,8 +51,8 @@ def validate_config(cfg: dict) -> bool:
 
     llm_cfg = cfg.get("llm", {})
     api_key = llm_cfg.get("api_key", "")
-    if not api_key or api_key == "YOUR_ANTHROPIC_API_KEY_HERE":
-        errors.append("请在 config.yaml 中填写 llm.api_key (Anthropic API Key)")
+    if not api_key or api_key == "YOUR_DEEPSEEK_API_KEY_HERE":
+        errors.append("请在 config.yaml 中填写 llm.api_key (DeepSeek API Key)")
 
     smtp_cfg = cfg.get("smtp", {})
     if not smtp_cfg.get("username") or smtp_cfg.get("username") == "YOUR_SMTP_USERNAME":
@@ -98,8 +98,8 @@ async def main():
     llm_cfg = cfg.get("llm", {})
     summarizer = LLMSummarizer(
         api_key=llm_cfg.get("api_key", ""),
-        model=llm_cfg.get("model", "claude-sonnet-20250601"),
-        base_url=llm_cfg.get("base_url", "https://api.anthropic.com"),
+        model=llm_cfg.get("model", "deepseek-chat"),
+        base_url=llm_cfg.get("base_url", "https://api.deepseek.com"),
         max_tokens=llm_cfg.get("max_tokens", 2048),
     )
 
